@@ -1,51 +1,80 @@
-# Editions Machettes
+# Editions Machettes API
 
-## Contexte:
-Editions Machettes souhaite développer une API sécurisée pour gérer une bibliothèque de livres avec des utilisateurs ayant différents rôles (admin et utilisateur standard).
+L'API des Editions Machettes permet de gérer une bibliothèque de livres avec une sécurité renforcée et des utilisateurs ayant différents rôles.
 
-## Spécifications:
+## Installation
 
-### 1. **Initialisation:**
-   - Création d'un projet Node.js.
-   - Installation des packages nécessaires: `express`, `winston`, `mongoose`, `jsonwebtoken`.
+Installez les dépendances :
+```bash
+npm install
+```
 
-### 2. **Système de Logging avec Winston:**
-   - Configuration de Winston pour enregistrer les informations, les warnings et les erreurs.
-   - Les logs doivent être consignés dans un fichier `logs.txt`.
+## Configuration
 
-### 3. **Modèles de Données avec Mongoose:**
-   - Modèle `User` avec les champs `username`, `password` et `role` (admin ou user).
-   - Modèle `Book` avec les champs `title`, `author`, `pages`, `genre`, `published` (boolean) et `userId` (référence à User).
-   - Les mots de passe des utilisateurs doivent être hashés.
+Pour configurer l'API, vous devez créer un fichier `.env` à la racine du projet. Ce fichier doit contenir les variables d'environnement suivantes :
+```bash
+PORT=3000
+MONGODB_URI=votre_uri_mongodb
+JWT_SECRET=votre_secret_jwt
+JWT_EXPIRY=1d
+```
 
-### 4. **Middleware et Routes avec JWT:**
-   - Mise en place d'un middleware JWT pour sécuriser les routes.
-   - Les routes `POST /books` et `DELETE /books/:id` doivent être accessibles uniquement par les administrateurs.
-   - Les routes `GET /books` et `GET /books/:id` doivent être accessibles par tous les utilisateurs authentifiés.
+## Execution : 
+```bash
+npm start
+```
 
-### 5. **Endpoints Requis:**
-   - `POST /users/register` pour enregistrer un nouvel utilisateur.
-   - `POST /users/login` pour connecter un utilisateur et renvoyer un JWT.
-   - `POST /books` pour ajouter un nouveau livre (admin seulement).
-   - `GET /books` pour récupérer tous les livres (utilisateurs authentifiés).
-   - `GET /books/:id` pour récupérer un livre spécifique (utilisateurs authentifiés).
-   - `DELETE /books/:id` pour supprimer un livre (admin seulement).
+Votre API devrait maintenant être en cours d'exécution sur `http://localhost:3000`.
 
-### 6. **Gestion d'Erreur:**
-   - Mise en œuvre d'une gestion d'erreur robuste et cohérente sur tous les endpoints.
-   - Les erreurs doivent être loggées avec Winston.
-   - Les réponses d'erreur doivent être claires et structurées.
+## Documentation des Endpoints
 
-### 7. **Test de l'API:**
-   - Tests complets de tous les endpoints avec des outils appropriés.
-   - Vérification de la sécurité JWT et de la gestion d'erreur.
+### Utilisateurs
 
-## Livrables:
-- Code source documenté et commenté.
-- Documentation d'utilisation et un README de déploiement de l'API.
+- **Enregistrer un nouvel utilisateur** :
+  - Endpoint : `POST /auth/register`
+  - Corps de la requête : 
+    ```json
+    {
+      "username": "votre_nom_d'utilisateur",
+      "password": "votre_mot_de_passe",
+    }
+    ```
+
+- **Connecter un utilisateur** :
+  - Endpoint : `POST /auth/login`
+  - Corps de la requête :
+    ```json
+    {
+      "username": "votre_nom_d'utilisateur",
+      "password": "votre_mot_de_passe"
+    }
+    ```
+
+### Livres
+
+- **Ajouter un nouveau livre (admin seulement)** :
+  - Endpoint : `POST /books`
+  - Corps de la requête :
+    ```json
+    {
+      "title": "titre_du_livre",
+      "author": "auteur",
+      "pages": 123,
+      "genre": "genre",
+      "published": true/false,
+      "userId": "id_de_l'utilisateur"
+    }
+    ```
+
+- **Récupérer tous les livres (utilisateurs authentifiés)** :
+  - Endpoint : `GET /books`
+
+- **Récupérer un livre spécifique (utilisateurs authentifiés)** :
+  - Endpoint : `GET /books/:id`
+
+- **Supprimer un livre (admin seulement)** :
+  - Endpoint : `DELETE /books/:id`
 
 ## Bonus
-- Réaliser un front-end simple pour exploiter l'API : technos et outils libre
 
-## Conclusion:
-Ce projet permettra aux Editions Machettes de gérer efficacement leur bibliothèque de livres avec une API sécurisée et robuste, facilitant ainsi les opérations quotidiennes et la gestion des utilisateurs et des livres.
+Un front-end simple est également disponible pour exploiter l'API. Veuillez consulter la documentation associée pour plus d'informations.
